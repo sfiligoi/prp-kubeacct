@@ -1,0 +1,91 @@
+import argparse
+import requests
+
+parser = argparse.ArgumentParser(description='print string1 or string2')
+parser.add_argument('-p', '--period', required=True)
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-w', '--walltime', action='store_true')
+group.add_argument('-g', '--gpu', action='store_true')
+group.add_argument('-c', '--cpu', action='store_true')
+group.add_argument('-m', '--memory', action='store_true')
+group.add_argument('-n', '--namespace', action='store_true')
+args = parser.parse_args()
+
+def wallclock(period):
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(node_namespace_pod:kube_pod_info:) by (namespace)').json()
+
+def gpu(period):
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace_gpu_utilization').json()
+
+def cpu(period):
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace_name:kube_pod_container_resource_requests_cpu_cores:sum').json()
+
+def memory(period):
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace:container_memory_usage_bytes:sum').json()
+
+if __name__ == '__main__':
+
+    func_one = wallclock(args.period)
+    func_two = gpu(args.period)
+    func_three = cpu(args.period)
+    func_four = memory(args.period)
+
+    if args.walltime:
+        values = [] #list of values (wallclock time)
+        namespace = []
+        dict = func_one["data"]["result"]
+        for i in dict:
+            namespace.extend(list(list(i.values())[0].values())) #adding to list of namespaces
+            values.append(list(i.values())[1]) #adding to list of wallclock times
+        for i in range(len(namespace)):
+            print(namespace[i])
+            print(values[i])
+            print("\t")
+
+
+
+    elif args.gpu:
+        g_namespace = []
+        g_values = []
+        dict = func_two["data"]["result"]
+        for i in dict:
+            g_namespace.append(list(list(i.values())[0].values())[1])
+            g_values.append(list(i.values())[1])
+
+        for i in range(len(g_namespace)):
+            print(g_namespace[i])
+            print(g_values[i])
+            print("\t")
+
+
+
+    elif args.cpu:
+        c_namespace = []
+        c_values = []
+        dict = func_three["data"]["result"]
+        for i in dict:
+            c_namespace.append(list(list(i.values())[0].values())[1])
+            c_values.append(list(i.values())[1])
+        for i in range(len(c_namespace)):
+            print(c_namespace[i])
+            print(c_values[i])
+            print("\t")
+
+
+
+    elif args.memory:
+        m_namespace = []
+        m_values = []
+        dict = func_four["data"]["result"]
+        for i in dict:
+            m_namespace.append(list(list(i.values())[0].values())[1])
+            m_values.append(list(i.values())[1])
+        for i in range(len(m_namespace)):
+            print(m_namespace[i])
+            print(m_values[i])
+            print("\t")
+
+
+
+    else:
+        print(args.period)
