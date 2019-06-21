@@ -15,13 +15,13 @@ def wallclock(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(node_namespace_pod:kube_pod_info:) by (namespace)').json()
 
 def gpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace_gpu_utilization').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace_gpu_utilization[' + period + '])').json()
 
 def cpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace_name:kube_pod_container_resource_requests_cpu_cores:sum').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace_name:kube_pod_container_resource_requests_cpu_cores:sum[' + period + '])').json()
 
 def memory(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=namespace:container_memory_usage_bytes:sum').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace:container_memory_usage_bytes:sum[' + period + '])').json()
 
 if __name__ == '__main__':
 
@@ -48,14 +48,22 @@ if __name__ == '__main__':
         g_namespace = []
         g_values = []
         dict = func_two["data"]["result"]
+        print(dict)
         for i in dict:
-            g_namespace.append(list(list(i.values())[0].values())[1])
-            g_values.append(list(i.values())[1])
-
+            g_namespace.extend(list(list(i.values())[0].values())) #adding to list of namespaces
+            g_values.append(list(i.values())[1]) #adding to list of wallclock times
         for i in range(len(g_namespace)):
             print(g_namespace[i])
             print(g_values[i])
             print("\t")
+        #for i in dict:
+        #    g_namespace.append(list(list(i.values())[0].values())[1])
+        #    g_values.append(list(i.values())[1])
+
+        #for i in range(len(g_namespace)):
+        #    print(g_namespace[i])
+        #    print(g_values[i])
+        #    print("\t")
 
 
 
@@ -64,12 +72,19 @@ if __name__ == '__main__':
         c_values = []
         dict = func_three["data"]["result"]
         for i in dict:
-            c_namespace.append(list(list(i.values())[0].values())[1])
-            c_values.append(list(i.values())[1])
+            c_namespace.extend(list(list(i.values())[0].values())) #adding to list of namespaces
+            c_values.append(list(i.values())[1]) #adding to list of wallclock times
         for i in range(len(c_namespace)):
             print(c_namespace[i])
             print(c_values[i])
             print("\t")
+        #for i in dict:
+        #    c_namespace.append(list(list(i.values())[0].values())[1])
+        #    c_values.append(list(i.values())[1])
+        #for i in range(len(c_namespace)):
+        #    print(c_namespace[i])
+        #    print(c_values[i])
+        #    print("\t")
 
 
 
@@ -77,9 +92,16 @@ if __name__ == '__main__':
         m_namespace = []
         m_values = []
         dict = func_four["data"]["result"]
+        #for i in dict:
+        #    m_namespace.append(list(list(i.values())[0].values())[1])
+        #    m_values.append(list(i.values())[1])
+        #for i in range(len(m_namespace)):
+        #    print(m_namespace[i])
+        #    print(m_values[i])
+        #    print("\t")
         for i in dict:
-            m_namespace.append(list(list(i.values())[0].values())[1])
-            m_values.append(list(i.values())[1])
+            m_namespace.extend(list(list(i.values())[0].values())) #adding to list of namespaces
+            m_values.append(list(i.values())[1]) #adding to list of wallclock times
         for i in range(len(m_namespace)):
             print(m_namespace[i])
             print(m_values[i])
