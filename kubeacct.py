@@ -11,19 +11,19 @@ group.add_argument('-m', '--memory', action='store_true')
 group.add_argument('-n', '--namespace', action='store_true')
 parser.add_argument('--all', action='store_true')
 parser.add_argument('-s', '--sortby')
+parser.add_argument('-u', '--unit')
 act = parser.add_mutually_exclusive_group()
-act.add_argument('-r', '--reverse', action='store_true')
+act.add_argument('-r', '--reverse', action='store_true') #if included, sorting is reversed
 args = parser.parse_args()
 
 def wallclock(period):
-        return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(node_namespace_pod:kube_pod_info:) by (namespace)').json()
-
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(node_namespace_pod:kube_pod_info:[' + period + '])) by (namespace)').json()
 
 def gpu(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace_gpu_utilization[' + period + '])').json()
 
 def cpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace_name:kube_pod_container_resource_requests_cpu_cores:sum[' + period + '])').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(increase(container_cpu_usage_seconds_total[' + period + '])) by (namespace)').json()
 
 def memory(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace:container_memory_usage_bytes:sum[' + period + '])').json()
@@ -38,13 +38,6 @@ if __name__ == '__main__':
     if args.walltime:
         values = [] #list of values (wallclock time)
         namespace = []
-        header = [("namespace:", "wallclock time:"), ("------------", "---------------")]
-
-        for h in header:
-            format = "%-65s %20s"
-            n = format%(h)
-            print(n)
-
         name_n_val = []
         dict = func_one["data"]["result"]
 
@@ -52,12 +45,45 @@ if __name__ == '__main__':
             namespace.extend(list(list(i.values())[0].values()))
             values.append(list(i.values())[1])
 
+        val = []
+        for i in values:
+            val.append(float(i[1]))
+
+        div = 1
+        if args.unit:
+            unit = args.unit
+            if unit == 's':
+                div = 1
+            elif unit == 'Gs':
+                div = 10**9
+            elif unit == 'Ms':
+                div = 10**6
+            elif unit == 'ks':
+                div = 10**3
+        else:
+            unit = 's'
+            maximum = max(val)
+            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = 'Gs'
+                div = 10**9
+            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+                unit = 'Ms'
+                div = 10**6
+            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+                unit = 'ks'
+                div = 10**3
+
+        final_val = []
+        for v in val:
+            v = round(v/div, 1)
+            final_val.append(v)
+
         for i in range(len(namespace)):
             if args.all:
-                name_n_val.append((namespace[i], round(float(values[i][1]), 1)))
+                name_n_val.append((namespace[i], final_val[i]))
             else:
-                if float(values[i][1]) != 0:
-                    name_n_val.append((namespace[i], round(float(values[i][1]), 1)))
+                if final_val[i] != 0:
+                    name_n_val.append((namespace[i], final_val[i]))
 
         def sorter(e, sortby=0):
             sortby = int(args.sortby)
@@ -72,8 +98,15 @@ if __name__ == '__main__':
 
         name_n_val.sort(key=sorter, reverse=reverse_bool)
 
+        header = [("namespace:", "wallclock time: (" + unit + ")"), ("------------", "---------------")]
+
+        for h in header:
+            format = "%-40s %20s"
+            n = format%(h)
+            print(n)
+
         for name in name_n_val:
-            format = "%-65s %20s"
+            format = "%-40s %20s"
             n = format%(name)
             print(n)
 
@@ -82,13 +115,6 @@ if __name__ == '__main__':
     elif args.gpu:
         g_namespace = []
         g_values = []
-        header = [("namespace:", "gpu:"), ("------------", "------------")]
-
-        for h in header:
-            format = "%-65s %20s"
-            n = format%(h)
-            print(n)
-
         name_n_val = []
         dict = func_two["data"]["result"]
 
@@ -96,12 +122,47 @@ if __name__ == '__main__':
             g_namespace.extend(list(list(i.values())[0].values()))
             g_values.append(list(i.values())[1])
 
+
+        val = []
+        for i in g_values:
+            val.append(float(i[1]))
+
+        div = 1
+        if args.unit:
+            unit = args.unit
+            if unit == 's':
+                div = 1
+            elif unit == 'Gs':
+                div = 10**9
+            elif unit == 'Ms':
+                div = 10**6
+            elif unit == 'ks':
+                div = 10**3
+        else:
+            unit = 's'
+            maximum = max(val)
+            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = 'Gs'
+                div = 10**9
+            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+                unit = 'Ms'
+                div = 10**6
+            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+                unit = 'ks'
+                div = 10**3
+
+        final_val = []
+        for v in val:
+            v = round(v/div, 1)
+            final_val.append(v)
+
         for i in range(len(g_namespace)):
             if args.all:
-                name_n_val.append((g_namespace[i], round(float(g_values[i][1]), 1)))
+                name_n_val.append((g_namespace[i], final_val[i]))
             else:
-                if float(g_values[i][1]) != 0:
-                    name_n_val.append((g_namespace[i], round(float(g_values[i][1]), 1)))
+                if final_val[i] != 0:
+                    name_n_val.append((g_namespace[i], final_val[i]))
+
 
         def sorter(e, sortby=0):
             sortby = int(args.sortby)
@@ -116,8 +177,15 @@ if __name__ == '__main__':
 
         name_n_val.sort(key=sorter, reverse=reverse_bool)
 
+        header = [("namespace:", "gpu: (" + unit + ")"), ("------------", "------------")]
+
+        for h in header:
+            format = "%-40s %20s"
+            n = format%(h)
+            print(n)
+
         for name in name_n_val:
-            format = "%-65s %20s"
+            format = "%-40s %20s"
             n = format%(name)
             print(n)
 
@@ -126,12 +194,6 @@ if __name__ == '__main__':
     elif args.cpu:
         c_namespace = []
         c_values = []
-        header = [("namespace:", "cpu:"), ("-------------", "-------------")]
-        for h in header:
-            format = "%-65s %20s"
-            n = format%(h)
-            print(n)
-
         name_n_val = []
         dict = func_three["data"]["result"]
 
@@ -139,12 +201,47 @@ if __name__ == '__main__':
             c_namespace.extend(list(list(i.values())[0].values()))
             c_values.append(list(i.values())[1])
 
+        val = []
+        for i in c_values:
+            val.append(float(i[1]))
+
+        div = 1
+        if args.unit:
+            unit = args.unit
+            if unit == 's':
+                div = 1
+            elif unit == 'Gs':
+                div = 10**9
+            elif unit == 'Ms':
+                div = 10**6
+            elif unit == 'ks':
+                div = 10**3
+        else:
+            unit = 's'
+            maximum = max(val)
+            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = 'Gs'
+                div = 10**9
+            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+                unit = 'Ms'
+                div = 10**6
+            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+                unit = 'ks'
+                div = 10**3
+
+        final_val = []
+        for v in val:
+            v = round(v/div, 1)
+            final_val.append(v)
+
+
         for i in range(len(c_namespace)):
             if args.all:
-                name_n_val.append((c_namespace[i], round(float(c_values[i][1]), 1)))
+                name_n_val.append((c_namespace[i], final_val[i]))
             else:
-                if float(c_values[i][1]) != 0:
-                    name_n_val.append((c_namespace[i], round(float(c_values[i][1]), 1)))
+                if final_val[i] != 0:
+                    name_n_val.append((c_namespace[i], final_val[i]))
+
 
         def sorter(e, sortby=0):
             sortby = int(args.sortby)
@@ -159,8 +256,15 @@ if __name__ == '__main__':
 
         name_n_val.sort(key=sorter, reverse=reverse_bool)
 
+        header = [("namespace:", "cpu: (" + unit + ")"), ("-------------", "-------------")]
+
+        for h in header:
+            format = "%-40s %20s"
+            n = format%(h)
+            print(n)
+
         for name in name_n_val:
-            format = "%-65s %20s"
+            format = "%-40s %20s"
             n = format%(name)
             print(n)
 
@@ -169,26 +273,53 @@ if __name__ == '__main__':
     elif args.memory:
         m_namespace = []
         m_values = []
-        header = [("namespace:", "memory:"), ("------------", "------------")]
-
-        for h in header:
-            format = "%-65s %20s"
-            n = format%(h)
-            print(n)
-
         name_n_val = []
         dict = func_four["data"]["result"]
 
         for i in dict:
             m_namespace.extend(list(list(i.values())[0].values()))
             m_values.append(list(i.values())[1])
-        for i in range(len(m_namespace)):
 
+        val = []
+        for i in m_values:
+            val.append(float(i[1]))
+
+        div = 1
+        if args.unit:
+            unit = args.unit
+            if unit == 's':
+                div = 1
+            elif unit == 'Gs':
+                div = 10**9
+            elif unit == 'Ms':
+                div = 10**6
+            elif unit == 'ks':
+                div = 10**3
+        else:
+            unit = 's'
+            maximum = max(val)
+            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = 'Gs'
+                div = 10**9
+            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+                unit = 'Ms'
+                div = 10**6
+            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+                unit = 'ks'
+                div = 10**3
+
+        final_val = []
+        for v in val:
+            v = round(v/div, 1)
+            final_val.append(v)
+
+
+        for i in range(len(final_val)):
             if args.all:
-                name_n_val.append((m_namespace[i], round(float(m_values[i][1]), 1)))
+                name_n_val.append((m_namespace[i], final_val[i]))
             else:
-                if float(m_values[i][1]) != 0:
-                    name_n_val.append((m_namespace[i], round(float(m_values[i][1]), 1)))
+                if final_val[i] != 0:
+                    name_n_val.append((m_namespace[i], final_val[i]))
 
         def sorter(e, sortby=0):
             sortby = int(args.sortby)
@@ -203,8 +334,15 @@ if __name__ == '__main__':
 
         name_n_val.sort(key=sorter, reverse=reverse_bool)
 
+        header = [("namespace:", "memory: (" + unit + ")"), ("------------", "------------")]
+
+        for h in header:
+            format = "%-40s %20s"
+            n = format%(h)
+            print(n)
+
         for name in name_n_val:
-            format = "%-65s %20s"
+            format = "%-40s %20s"
             n = format%(name)
             print(n)
 
