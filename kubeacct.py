@@ -26,7 +26,7 @@ def cpu(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(increase(container_cpu_usage_seconds_total[' + period + '])) by (namespace)').json()
 
 def memory(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace:container_memory_usage_bytes:sum[' + period + '])').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(namespace:container_memory_usage_bytes:sum[' + period + '])) by (namespace)').json()
 
 if __name__ == '__main__':
 
@@ -314,7 +314,7 @@ if __name__ == '__main__':
             final_val.append(v)
 
 
-        for i in range(len(final_val)):
+        for i in range(len(m_namespace)):
             if args.all:
                 name_n_val.append((m_namespace[i], final_val[i]))
             else:
