@@ -14,6 +14,7 @@ parser.add_argument('-s', '--sortby')
 parser.add_argument('-u', '--unit')
 act = parser.add_mutually_exclusive_group()
 act.add_argument('-r', '--reverse', action='store_true') #if included, sorting is reversed
+act.add_argument('--requested', action='store_true')
 args = parser.parse_args()
 
 def wallclock(period):
@@ -23,6 +24,8 @@ def gpu(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum_over_time(namespace_gpu_utilization[' + period + ':1s])').json()
 
 def cpu(period):
+    if args.requested:
+        return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(kube_pod_container_resource_requests_cpu_cores[1h:1s])) by (namespace)').json()
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(delta(container_cpu_usage_seconds_total[' + period + '])/2) by (namespace)').json()
 
 def memory(period):
