@@ -55,25 +55,50 @@ if __name__ == '__main__':
         div = 1
         if args.unit:
             unit = args.unit
-            if unit == 's':
+            if unit == "s":
                 div = 1
-            elif unit == 'Gs':
+            elif unit == "Ys":
+                div = 10**24
+            elif unit == "Zs":
+                div = 10**21
+            elif unit == "Es":
+                div = 10**18
+            elif unit == "Ps":
+                div = 10**15
+            elif unit == "Ts":
+                div = 10**12
+            elif unit == "Gs":
                 div = 10**9
-            elif unit == 'Ms':
+            elif unit == "Ms":
                 div = 10**6
-            elif unit == 'ks':
+            elif unit == "ks":
                 div = 10**3
         else:
-            unit = 's'
+            unit = "s"
             maximum = max(val)
-            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = 'Gs'
+            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+                unit = "Ys"
+                div = 10**24
+            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+                unit = "Zs"
+                div = 10**21
+            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+                unit = "Es"
+                div = 10**18
+            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+                unit = "Ps"
+                div = 10**15
+            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+                unit = "Ts"
+                div = 10**12
+            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = "Gs"
                 div = 10**9
             elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = 'Ms'
+                unit = "Ms"
                 div = 10**6
             elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = 'ks'
+                unit = "ks"
                 div = 10**3
 
         final_val = []
@@ -133,25 +158,50 @@ if __name__ == '__main__':
         div = 1
         if args.unit:
             unit = args.unit
-            if unit == 's':
+            if unit == "s":
                 div = 1
-            elif unit == 'Gs':
+            elif unit == "Ys":
+                div = 10**24
+            elif unit == "Zs":
+                div = 10**21
+            elif unit == "Es":
+                div = 10**18
+            elif unit == "Ps":
+                div = 10**15
+            elif unit == "Ts":
+                div = 10**12
+            elif unit == "Gs":
                 div = 10**9
-            elif unit == 'Ms':
+            elif unit == "Ms":
                 div = 10**6
-            elif unit == 'ks':
+            elif unit == "ks":
                 div = 10**3
         else:
-            unit = 's'
+            unit = "s"
             maximum = max(val)
-            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = 'Gs'
+            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+                unit = "Ys"
+                div = 10**24
+            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+                unit = "Zs"
+                div = 10**21
+            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+                unit = "Es"
+                div = 10**18
+            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+                unit = "Ps"
+                div = 10**15
+            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+                unit = "Ts"
+                div = 10**12
+            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = "Gs"
                 div = 10**9
             elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = 'Ms'
+                unit = "Ms"
                 div = 10**6
             elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = 'ks'
+                unit = "ks"
                 div = 10**3
 
         final_val = []
@@ -211,25 +261,50 @@ if __name__ == '__main__':
         div = 1
         if args.unit:
             unit = args.unit
-            if unit == 's':
+            if unit == "s":
                 div = 1
-            elif unit == 'Gs':
+            elif unit == "Ys":
+                div = 10**24
+            elif unit == "Zs":
+                div = 10**21
+            elif unit == "Es":
+                div = 10**18
+            elif unit == "Ps":
+                div = 10**15
+            elif unit == "Ts":
+                div = 10**12
+            elif unit == "Gs":
                 div = 10**9
-            elif unit == 'Ms':
+            elif unit == "Ms":
                 div = 10**6
-            elif unit == 'ks':
+            elif unit == "ks":
                 div = 10**3
         else:
-            unit = 's'
+            unit = "s"
             maximum = max(val)
-            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = 'Gs'
+            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+                unit = "Ys"
+                div = 10**24
+            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+                unit = "Zs"
+                div = 10**21
+            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+                unit = "Es"
+                div = 10**18
+            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+                unit = "Ps"
+                div = 10**15
+            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+                unit = "Ts"
+                div = 10**12
+            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = "Gs"
                 div = 10**9
             elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = 'Ms'
+                unit = "Ms"
                 div = 10**6
             elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = 'ks'
+                unit = "ks"
                 div = 10**3
 
         final_val = []
@@ -290,25 +365,50 @@ if __name__ == '__main__':
         div = 1
         if args.unit:
             unit = args.unit
-            if unit == 's':
+            if unit == "s":
                 div = 1
-            elif unit == 'Gs':
+            elif unit == "Ys":
+                div = 10**24
+            elif unit == "Zs":
+                div = 10**21
+            elif unit == "Es":
+                div = 10**18
+            elif unit == "Ps":
+                div = 10**15
+            elif unit == "Ts":
+                div = 10**12
+            elif unit == "Gs":
                 div = 10**9
-            elif unit == 'Ms':
+            elif unit == "Ms":
                 div = 10**6
-            elif unit == 'ks':
+            elif unit == "ks":
                 div = 10**3
         else:
-            unit = 's'
+            unit = "s"
             maximum = max(val)
-            if maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = 'Gs'
+            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+                unit = "Ys"
+                div = 10**24
+            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+                unit = "Zs"
+                div = 10**21
+            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+                unit = "Es"
+                div = 10**18
+            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+                unit = "Ps"
+                div = 10**15
+            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+                unit = "Ts"
+                div = 10**12
+            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+                unit = "Gs"
                 div = 10**9
             elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = 'Ms'
+                unit = "Ms"
                 div = 10**6
             elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = 'ks'
+                unit = "ks"
                 div = 10**3
 
         final_val = []
