@@ -20,13 +20,13 @@ def wallclock(period):
     return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(node_namespace_pod:kube_pod_info:[' + period + '])) by (namespace)').json()
 
 def gpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=increase(namespace_gpu_utilization[' + period + '])').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum_over_time(namespace_gpu_utilization[' + period + ':1s])').json()
 
 def cpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(increase(container_cpu_usage_seconds_total[' + period + '])) by (namespace)').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(delta(container_cpu_usage_seconds_total[' + period + '])/2) by (namespace)').json()
 
 def memory(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(namespace:container_memory_usage_bytes:sum[' + period + '])) by (namespace)').json()
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(namespace:container_memory_usage_bytes:sum[' + period + ':1s])) by (namespace)').json()
 
 if __name__ == '__main__':
 
