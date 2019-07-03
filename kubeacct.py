@@ -15,21 +15,49 @@ parser.add_argument('-u', '--unit')
 act = parser.add_mutually_exclusive_group()
 act.add_argument('-r', '--reverse', action='store_true') #if included, sorting is reversed
 act.add_argument('--requested', action='store_true')
+parser.add_argument('-o', '--offset')
+
 args = parser.parse_args()
 
 def wallclock(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(node_namespace_pod:kube_pod_info:[' + period + '])) by (namespace)').json()
+    query = 'sum(sum_over_time(node_namespace_pod:kube_pod_info:[' + period + ']'
+    if args.offset:
+        query = query + ' offset ' + args.offset
+    query += ')) by (namespace)'
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
 
 def gpu(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum_over_time(namespace_gpu_utilization[' + period + ':1s])').json()
+    if args.requested:
+        query = 'sum(sum_over_time(pod_gpus[' + period + ':1s]'
+        if args.offset:
+            query = query + ' offset ' + args.offset
+        query += ')) by (namespace_name)'
+        return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
+    query = 'sum_over_time(namespace_gpu_utilization[' + period + ':1s]'
+    if args.offset:
+        query = query + ' offset ' + args.offset
+    query += ')'
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
 
 def cpu(period):
     if args.requested:
-        return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(kube_pod_container_resource_requests_cpu_cores[1h:1s])) by (namespace)').json()
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(delta(container_cpu_usage_seconds_total[' + period + '])/2) by (namespace)').json()
+        query = 'sum(sum_over_time(kube_pod_container_resource_requests_cpu_cores[' + period + ':1s]'
+        if args.offset:
+            query = query + ' offset ' + args.offset
+        query += ')) by (namespace)'
+        return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
+    query = 'sum(increase(container_cpu_usage_seconds_total[' + period + ':1m]'
+    if args.offset:
+        query = query + ' offset ' + args.offset
+    query += ')/2) by (namespace)'
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
 
 def memory(period):
-    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=sum(sum_over_time(namespace:container_memory_usage_bytes:sum[' + period + ':1s])) by (namespace)').json()
+    query = 'sum(sum_over_time(namespace:container_memory_usage_bytes:sum[' + period + ':1s]'
+    if args.offset:
+        query = query + ' offset ' + args.offset
+    query += ')) by (namespace)'
+    return requests.get('https://prometheus.nautilus.optiputer.net/api/v1/query?query=' + query).json()
 
 if __name__ == '__main__':
 
