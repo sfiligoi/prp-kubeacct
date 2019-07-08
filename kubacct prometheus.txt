@@ -1,0 +1,41 @@
+﻿GPU requests:
+* Pod_gpus
+   * Gets number of gpus for each pod
+* sum(sum_over_time(pod_gpus[1h:1s] offset 1w)) by (namespace_name)
+   * Gets total gpus requested in specified period for each namespace
+   * Offset + period is how long ago to get the information from and is optional
+GPU usage:
+* Namespace_gpu_utilization
+   * Gets gpu usage for each namespace
+* sum_over_time(namespace_gpu_utilization[1h:1s] offset 1w)
+   * Gets total gpu usage for specified period for each namespace
+   * Offset is optional and specifies how far in the past to get the data from
+
+
+CPU requests:
+* Kube_pod_container_resource_requests_cpu_cores
+   * Gets the number of requested cpus for each container
+* sum(sum_over_time(kube_pod_container_resource_requests_cpu_cores[1h:1s] offset 1w)) by (namespace)
+   * Sums up the total cpus requested in the specified period for each namespace
+   * Offset is optional and is how far in the past to go
+
+
+CPU usage:
+* Container_cpu_usage_seconds_total
+   * Total cpu usage for each container
+* sum(increase(container_cpu_usage_seconds_total[1h:1m] offset 1w)/2) by (namespace)
+   * Sums up the total cpu usage in specified period with specified offset by namespace
+
+
+Memory usage:
+* Namespace:container_memory_usage_bytes:sum
+   * Gets the total memory usage for each namespace
+* sum(sum_over_time(namespace:container_memory_usage_bytes:sum[1h:1s] offset 1w)) by (namespace)
+   * Sums total memory usage by each namespace for specified period and offset 
+
+
+Walltime:
+* Node_namespace_pod:kube_pod_info:
+   * Gets the wallclock time for each namespace
+* sum(sum_over_time(node_namespace_pod:kube_pod_info:[1h] offset 1w)) by (namespace)
+   * Sums wallclock time over specified period and offset for each namespace.
