@@ -1,6 +1,6 @@
 import requests
 
-def walltime(dict_, sort_, unit_="", reverse=False, all=False):
+def walltime(dict_, sort_, unit_, reverse=False, all=False):
     values = []
     namespace = []
     name_n_val = []
@@ -14,54 +14,54 @@ def walltime(dict_, sort_, unit_="", reverse=False, all=False):
     for i in values:
         val.append(float(i[1]))
 
-        div = 1
-        if unit_:
-            unit = unit_
-            if unit == "s":
-                div = 1
-            elif unit == "Ys":
-                div = 10**24
-            elif unit == "Zs":
-                div = 10**21
-            elif unit == "Es":
-                div = 10**18
-            elif unit == "Ps":
-                div = 10**15
-            elif unit == "Ts":
-                div = 10**12
-            elif unit == "Gs":
-                div = 10**9
-            elif unit == "Ms":
-                div = 10**6
-            elif unit == "ks":
-                div = 10**3
-        else:
-            unit = "s"
-            maximum = max(val)
-            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
-                unit = "Ys"
-                div = 10**24
-            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
-                unit = "Zs"
-                div = 10**21
-            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
-                unit = "Es"
-                div = 10**18
-            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
-                unit = "Ps"
-                div = 10**15
-            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
-                unit = "Ts"
-                div = 10**12
-            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = "Gs"
-                div = 10**9
-            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = "Ms"
-                div = 10**6
-            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = "ks"
-                div = 10**3
+    div = 1
+    unit = unit_
+    if unit:
+        if unit == "s":
+            div = 1
+        elif unit == "Ys":
+            div = 10**24
+        elif unit == "Zs":
+            div = 10**21
+        elif unit == "Es":
+            div = 10**18
+        elif unit == "Ps":
+            div = 10**15
+        elif unit == "Ts":
+            div = 10**12
+        elif unit == "Gs":
+            div = 10**9
+        elif unit == "Ms":
+            div = 10**6
+        elif unit == "ks":
+            div = 10**3
+    else:
+        unit = "s"
+        maximum = max(val)
+        if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+            unit = "Ys"
+            div = 10**24
+        elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+            unit = "Zs"
+            div = 10**21
+        elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+            unit = "Es"
+            div = 10**18
+        elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+            unit = "Ps"
+            div = 10**15
+        elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+            unit = "Ts"
+            div = 10**12
+        elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+            unit = "Gs"
+            div = 10**9
+        elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+            unit = "Ms"
+            div = 10**6
+        elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+            unit = "ks"
+            div = 10**3
 
     final_val = []
     for v in val:
@@ -117,54 +117,54 @@ def gpu(dict_, sort_, unit_="", reverse=False, all=False):
     for i in g_values:
         val.append(float(i[1]))
 
-        div = 1
-        if unit_:
-            unit = unit_
-            if unit == "s":
-                div = 1
-            elif unit == "Ys":
-                div = 10**24
-            elif unit == "Zs":
-                div = 10**21
-            elif unit == "Es":
-                div = 10**18
-            elif unit == "Ps":
-                div = 10**15
-            elif unit == "Ts":
-                div = 10**12
-            elif unit == "Gs":
-                div = 10**9
-            elif unit == "Ms":
-                div = 10**6
-            elif unit == "ks":
-                div = 10**3
-        else:
-            unit = "s"
-            maximum = max(val)
-            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
-                unit = "Ys"
-                div = 10**24
-            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
-                unit = "Zs"
-                div = 10**21
-            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
-                unit = "Es"
-                div = 10**18
-            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
-                unit = "Ps"
-                div = 10**15
-            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
-                unit = "Ts"
-                div = 10**12
-            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = "Gs"
-                div = 10**9
-            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = "Ms"
-                div = 10**6
-            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = "ks"
-                div = 10**3
+    div = 1
+    unit = unit_
+    if unit:
+        if unit == "s":
+            div = 1
+        elif unit == "Ys":
+            div = 10**24
+        elif unit == "Zs":
+            div = 10**21
+        elif unit == "Es":
+            div = 10**18
+        elif unit == "Ps":
+            div = 10**15
+        elif unit == "Ts":
+            div = 10**12
+        elif unit == "Gs":
+            div = 10**9
+        elif unit == "Ms":
+            div = 10**6
+        elif unit == "ks":
+            div = 10**3
+    else:
+        unit = "s"
+        maximum = max(val)
+        if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+            unit = "Ys"
+            div = 10**24
+        elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+            unit = "Zs"
+            div = 10**21
+        elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+            unit = "Es"
+            div = 10**18
+        elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+            unit = "Ps"
+            div = 10**15
+        elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+            unit = "Ts"
+            div = 10**12
+        elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+            unit = "Gs"
+            div = 10**9
+        elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+            unit = "Ms"
+            div = 10**6
+        elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+            unit = "ks"
+            div = 10**3
 
     final_val = []
     for v in val:
@@ -207,7 +207,7 @@ def gpu(dict_, sort_, unit_="", reverse=False, all=False):
 
 
 
-def cpu(dict_, sort_, unit_="", reverse=False, all=False):
+def cpu(dict_, sort_, unit_, reverse=False, all=False):
     c_namespace = []
     c_values = []
     name_n_val = []
@@ -221,54 +221,54 @@ def cpu(dict_, sort_, unit_="", reverse=False, all=False):
     for i in c_values:
         val.append(float(i[1]))
 
-        div = 1
-        if unit_:
-            unit = unit_
-            if unit == "s":
-                div = 1
-            elif unit == "Ys":
-                div = 10**24
-            elif unit == "Zs":
-                div = 10**21
-            elif unit == "Es":
-                div = 10**18
-            elif unit == "Ps":
-                div = 10**15
-            elif unit == "Ts":
-                div = 10**12
-            elif unit == "Gs":
-                div = 10**9
-            elif unit == "Ms":
-                div = 10**6
-            elif unit == "ks":
-                div = 10**3
-        else:
-            unit = "s"
-            maximum = max(val)
-            if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
-                unit = "Ys"
-                div = 10**24
-            elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
-                unit = "Zs"
-                div = 10**21
-            elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
-                unit = "Es"
-                div = 10**18
-            elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
-                unit = "Ps"
-                div = 10**15
-            elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
-                unit = "Ts"
-                div = 10**12
-            elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
-                unit = "Gs"
-                div = 10**9
-            elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
-                unit = "Ms"
-                div = 10**6
-            elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
-                unit = "ks"
-                div = 10**3
+    div = 1
+    unit = unit_
+    if unit:
+        if unit == "s":
+            div = 1
+        elif unit == "Ys":
+            div = 10**24
+        elif unit == "Zs":
+            div = 10**21
+        elif unit == "Es":
+            div = 10**18
+        elif unit == "Ps":
+            div = 10**15
+        elif unit == "Ts":
+            div = 10**12
+        elif unit == "Gs":
+            div = 10**9
+        elif unit == "Ms":
+            div = 10**6
+        elif unit == "ks":
+            div = 10**3
+    else:
+        unit = "s"
+        maximum = max(val)
+        if maximum/10**24 >= 1000 and maximum/10**24 <= 9999999.9:
+            unit = "Ys"
+            div = 10**24
+        elif maximum/10**21 >= 1000 and maximum/10**21 <= 9999999.9:
+            unit = "Zs"
+            div = 10**21
+        elif maximum/10**18 >= 1000 and maximum/10**18 <= 9999999.9:
+            unit = "Es"
+            div = 10**18
+        elif maximum/10**15 >= 1000 and maximum/10**15 <= 9999999.9:
+            unit = "Ps"
+            div = 10**15
+        elif maximum/10**12 >= 1000 and maximum/10**12 <= 9999999.9:
+            unit = "Ts"
+            div = 10**12
+        elif maximum/10**9 >= 1000 and maximum/10**9 <= 9999999.9:
+            unit = "Gs"
+            div = 10**9
+        elif maximum/10**6 >= 1000 and maximum/10**6 <= 9999999.9:
+            unit = "Ms"
+            div = 10**6
+        elif maximum/10**3 >= 1000 and maximum/10**3 <= 9999999.9:
+            unit = "ks"
+            div = 10**3
 
     final_val = []
     for v in val:
@@ -328,8 +328,8 @@ def memory(dict_, sort_, unit_="", reverse=False, all=False):
 
     #div, unit = unit_convert(unit_)
     div = 1
-    if unit_:
-        unit = unit_
+    unit = unit_
+    if unit:
         if unit == "s":
             div = 1
         elif unit == "Ys":

@@ -11,12 +11,11 @@ group.add_argument('-c', '--cpu', action='store_true')
 group.add_argument('-m', '--memory', action='store_true')
 parser.add_argument('--all', action='store_true')
 parser.add_argument('-s', '--sortby')
-parser.add_argument('-u', '--unit')
+parser.add_argument('-o', '--offset')
 act = parser.add_mutually_exclusive_group()
 act.add_argument('-r', '--reverse', action='store_true') #if included, sorting is reversed
 act.add_argument('--requested', action='store_true')
-parser.add_argument('-o', '--offset')
-
+act.add_argument('-u', '--unit')
 args = parser.parse_args()
 
 if __name__ == '__main__':
@@ -37,7 +36,7 @@ if __name__ == '__main__':
             reverse = True
         if args.all:
             all = True
-        kubedisplay.walltime(wall_dat, unit, sortby, reverse, all)
+        kubedisplay.walltime(wall_dat, sortby, unit, reverse, all)
 
     elif args.gpu:
         requested = False
@@ -59,7 +58,7 @@ if __name__ == '__main__':
             reverse = True
         if args.all:
             all = True
-        kubedisplay.gpu(gpu_dat, unit, sortby, reverse, all)
+        kubedisplay.gpu(gpu_dat, sortby, unit, reverse, all)
 
     elif args.cpu:
         requested = False
@@ -81,7 +80,7 @@ if __name__ == '__main__':
             reverse = True
         if args.all:
             all = True
-        kubedisplay.cpu(cpu_dat, unit, sortby, reverse, all)
+        kubedisplay.cpu(cpu_dat, sortby, unit, reverse, all)
 
     elif args.memory:
         offset = ""
@@ -100,4 +99,4 @@ if __name__ == '__main__':
             reverse = True
         if args.all:
             all = True
-        kubedisplay.memory(memory_dat, unit, sortby, reverse, all)
+        kubedisplay.memory(memory_dat, sortby, unit, reverse, all)
