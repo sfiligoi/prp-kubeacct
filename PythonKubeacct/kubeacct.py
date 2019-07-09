@@ -19,11 +19,12 @@ act.add_argument('-u', '--unit')
 args = parser.parse_args()
 
 if __name__ == '__main__':
+    queryurl = kubedata.Promdata('https://prometheus.nautilus.optiputer.net/api/v1/query?query=')
     if args.walltime:
         offset = ""
         if args.offset:
             offset = args.offset
-        wall_dat = kubedata.wallclock(args.period, args.offset)
+        wall_dat = queryurl.wallclock(args.period, args.offset)
         unit = ""
         sortby = ""
         reverse = False
@@ -45,7 +46,7 @@ if __name__ == '__main__':
             requested = args.requested
         if args.offset:
             offset = args.offset
-        gpu_dat = kubedata.gpu(args.period, args.requested, args.offset)
+        gpu_dat = queryurl.gpu(args.period, args.requested, args.offset)
         unit = ""
         sortby = ""
         reverse = False
@@ -67,7 +68,7 @@ if __name__ == '__main__':
             requested = args.requested
         if args.offset:
             offset = args.offset
-        cpu_dat = kubedata.cpu(args.period, requested, offset)
+        cpu_dat = queryurl.cpu(args.period, requested, offset)
         unit = ""
         sortby = ""
         reverse = False
@@ -86,7 +87,7 @@ if __name__ == '__main__':
         offset = ""
         if args.offset:
             offset = args.offset
-        memory_dat = kubedata.memory(args.period, offset)
+        memory_dat = queryurl.memory(args.period, offset)
         unit = ""
         sortby = ""
         reverse = False
