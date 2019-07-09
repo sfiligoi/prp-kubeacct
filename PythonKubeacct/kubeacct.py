@@ -2,14 +2,13 @@ import argparse
 import kubedata
 import kubedisplay
 
-parser = argparse.ArgumentParser(description='print string1 or string2')
+parser = argparse.ArgumentParser(description='displays kubernetes data queried from prometheus')
 parser.add_argument('-p', '--period', required=True)
 group = parser.add_mutually_exclusive_group()
 group.add_argument('-w', '--walltime', action='store_true')
 group.add_argument('-g', '--gpu', action='store_true')
 group.add_argument('-c', '--cpu', action='store_true')
 group.add_argument('-m', '--memory', action='store_true')
-group.add_argument('-n', '--namespace', action='store_true')
 parser.add_argument('--all', action='store_true')
 parser.add_argument('-s', '--sortby')
 parser.add_argument('-u', '--unit')
