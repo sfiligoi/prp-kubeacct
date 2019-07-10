@@ -9,7 +9,10 @@ Kubeacct.py
 			- if --requested is added, the requested number of cpus will be displayed. Otherwise the total usage will be displayed.
 		- -w: wallclock time
 		- -m: memory
+		- -n: network
+			- if --transmit is added the transmitted network will be displayed instead of the default received.
 	- -o followed by a time ("1w", "30d", etc), is the offset and will cause the program to retrieve the data from that much time in the past.
+		- in our experience adding an offset whiile trying to find network data will most likely fail.
 	- i.e: $ python kubeacct.py -p "1h" -g -o "1w" 
 		- This retrieves the total gpu usage a week ago from the query time over a 1 hour period.
 	- -s followed by either "0" or "1" tells the program how to sort the data.
@@ -19,5 +22,5 @@ Kubeacct.py
 	- the program automatically converts the data into proper units and doesn't diplay namespaces whose according value is 0.
 		- -all displays all namespaces without filtering out the 0's.
 		- -u followed by a unit ("s", "ks", "Gs", etc.) forces a conversion to the specified unit
-	- i.e $ python kubeacct.py -p "24h" -c -requested -s "0" -u "Ms"
+	- i.e $ python kubeacct.py -p "24h" -c --requested -s "0" -u "Ms"
 		- gets the total cpus requested in the last 24 for each namespaces, sorted alphabetically, and in Ms.
